@@ -1,6 +1,8 @@
 const {userRepository} = require('../repository')
 const ResponseError = require('../utils')
 const bcrypt = require('bcrypt'); 
+const jwt = require('jsonwebtoken')
+require('dotenv').config();
 
 
 const register = async (params) => {
@@ -18,4 +20,25 @@ const register = async (params) => {
   }
   return result
 }
-module.exports = {register}
+
+const login = async (params) => {
+  const {email, password} = params
+  
+  const user = await userRepository.getUserByEmail(email)
+  
+  if(!user){
+    throw err = new ResponseError(401, "email or password wrong")
+  }
+  const cekPassword = await bcrypt.compare(password, user.password)
+  if(!cekPassword){
+    throw err = new ResponseError(401, "email or password wrong")
+  }
+  const payload = {
+    id: user.id,
+    email: user.email
+  }
+  const key = process.env.JWT_SECRET
+  const aksesToken = jwt.sign(payload, key,{expiresIn: '2h'});
+  return aksesToken
+}
+module.exports = {register, login}

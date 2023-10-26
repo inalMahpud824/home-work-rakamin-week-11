@@ -10,4 +10,16 @@ const register = async (req, res) => {
   }
 };
 
-module.exports = {register}
+const login = async (req, res) => {
+  try {
+    const result = await authServices.login(req.body);
+    res.status(200).header('Authorization', `Bearer ${result}`).json({
+      message: "login succes",
+  })
+  } catch(err) {
+    console.error(err)
+    res.status(err.status).json(err.message)
+  }
+};
+
+module.exports = {register, login}
