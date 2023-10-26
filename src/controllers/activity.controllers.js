@@ -43,7 +43,7 @@ const updateActivity = async (req, res) => {
 const deleteActivity = async (req, res) => {
   try{
     const result = await activityServices.deleteActivity(req.params)
-    res.status(200).json({ messege: "create success", result });
+    res.status(200).json({ messege: "delete success", result });
   }catch (err) {
     console.error(err);
     res.status(err.status).json(err.message);
