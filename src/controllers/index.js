@@ -1,3 +1,4 @@
 const authControllers = require('./auth.controllers')
 const activityControllers = require('./activity.controllers')
-module.exports = {authControllers, activityControllers}
+const itemControllers = require('./items.controllers')
+module.exports = {authControllers, activityControllers, itemControllers}
