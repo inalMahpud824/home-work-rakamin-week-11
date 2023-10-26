@@ -1,3 +1,3 @@
 const authServices = require('./auth.services')
-
-module.exports = {authServices}
+const activityServices = require('./activity.services')
+module.exports = {authServices, activityServices}

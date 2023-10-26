@@ -1,2 +1,3 @@
 const userRepository = require('./users.repository')
-module.exports = {userRepository}
+const activityRepository = require('./activity.repository')
+module.exports = {userRepository, activityRepository}
