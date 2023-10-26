@@ -17,4 +17,39 @@ const createActivity = async (title) => {
   return result
 }
 
-module.exports = {getAllActivity, createActivity}
+const getActivityById = async (params) => {
+  const id = parseInt(params)
+  const result = await prisma.activity.findUnique({
+    where:{
+      id: id
+    }
+  })
+  return result
+}
+
+const updateActivity = async (params, title) => {
+  const id = parseInt(params)
+  const result = await prisma.activity.update({
+    where:{
+      id: id
+    },
+    data:{
+      title: title
+    },
+    select:{
+      title:true
+    }
+  })
+  return result
+}
+
+const deleteActivity = async (params) => {
+  const id = parseInt(params)
+  const result = await prisma.activity.delete({
+    where:{
+      id: id
+    }
+  })
+  return result
+}
+module.exports = {getAllActivity, createActivity, getActivityById, updateActivity, deleteActivity}
