@@ -33,7 +33,7 @@ const updateItem = async (params, body) => {
 
   const cekId = await itemRepository.getItemById(id);
   if (!cekId) {
-    throw (err = new ResponseError(404, "Activity not found"));
+    throw (err = new ResponseError(404, "Item not found"));
   }
 
   const result = await itemRepository.updateItem(id, activity_id, title, isActive)
@@ -48,7 +48,7 @@ const deleteItem = async (params) => {
 
  const cekId = await itemRepository.getItemById(id);
   if (!cekId) {
-    throw (err = new ResponseError(404, "Activity not found"));
+    throw (err = new ResponseError(404, "Item not found"));
   }
 
   const result = await itemRepository.deleteItem(id)
