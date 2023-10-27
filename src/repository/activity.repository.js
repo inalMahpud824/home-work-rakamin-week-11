@@ -22,6 +22,9 @@ const getActivityById = async (params) => {
   const result = await prisma.activity.findUnique({
     where:{
       id: id
+    },
+    include:{
+      items: true
     }
   })
   return result
@@ -45,10 +48,19 @@ const updateActivity = async (params, title) => {
 
 const deleteActivity = async (params) => {
   const id = parseInt(params)
+  const cekIdItems = await prisma.item.findUnique
+  if(cekIdItems){
+    await prisma.item.deleteMany({
+      where:{
+        activity_id: id
+      }
+    })
+  }
   const result = await prisma.activity.delete({
     where:{
       id: id
-    }
+    },
+    include: { items: true },
   })
   return result
 }
