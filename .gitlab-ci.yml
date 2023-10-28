@@ -1,37 +1,38 @@
-image: docker:latest
-
+image: node:18-alpine
 variables:
-  REPOSITORY_URL: inalmahpud1/homework-prisma-postgres-api
+  REPOSITORY_URL: inalmahpud1/homework-prisma-postgres-api:1.0
 
 services:
-  -docker:dind
+  - docker:dind
 
 before_script:
-  - docker login --username=$DH_USERNAME --password=$DH_PASSWORD
+  - docker login -u $DH_USERNAME -p $DH_PASSWORD
 
 stages:
   - build
   - deploy
-build: 
+
+build:
   stage: build
   script:
     - echo "Build image..."
-    - docker build 
-      -t homework-prisma-postgres-api:1.0
-      --build-arg PORT=PORT
-      --no-cache
+    - docker build \
+      -t homework-prisma-postgres-api:1.0 \
+      --build-arg PORT=$PORT \
+      --no-cache .
     - echo "Tagging image..."
     - docker tag homework-prisma-postgres-api:1.0 $REPOSITORY_URL:latest
-    - echo "pushing image"
-    - docker push $REPOSITORY_URL:1.0
+    - echo "Pushing image..."
+    - docker push $REPOSITORY_URL:latest
   only:
     - master
-  
+
 deploy:
   stage: deploy
   script:
-    - docker homework-prisma-postgres-api || true && docker rm homework-prisma-postgres-api || true
-    - docker container run -dt -p $PORT:$PORT --name homework-prisma-postgres-api $REPOSITORY_URL:latest
+    - docker stop homework-prisma-postgres-api || true
+    - docker rm homework-prisma-postgres-api || true
+    - docker run -dt -p $PORT:$PORT --name homework-prisma-postgres-api $REPOSITORY_URL:latest
     - docker image prune -f
   only:
     - master
