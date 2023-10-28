@@ -21,9 +21,9 @@ build:
       --build-arg PORT=$PORT \
       --no-cache .
     - echo "Tagging image..."
-    - docker tag homework-prisma-postgres-api:1.0 $REPOSITORY_URL:latest
+    - docker tag homework-prisma-postgres-api:1.0 $REPOSITORY_URL
     - echo "Pushing image..."
-    - docker push $REPOSITORY_URL:latest
+    - docker push $REPOSITORY_URL
   only:
     - master
 
@@ -32,7 +32,7 @@ deploy:
   script:
     - docker stop homework-prisma-postgres-api || true
     - docker rm homework-prisma-postgres-api || true
-    - docker run -dt -p $PORT:$PORT --name homework-prisma-postgres-api $REPOSITORY_URL:latest
+    - docker run -dt -p $PORT:$PORT --name homework-prisma-postgres-api $REPOSITORY_URL
     - docker image prune -f
   only:
     - master
