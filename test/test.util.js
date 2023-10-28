@@ -1,5 +1,5 @@
 const prisma = require("../src/models");
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcryptjs');
 const createUser = async () => {
   await prisma.user.create({
     data: {
