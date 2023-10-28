@@ -4,7 +4,7 @@ variables:
   REPOSITORY_URL: inalmahpud1/homework-prisma-postgres-api
 
 services:
-  -docker:dind
+  - docker:dind
 
 before_script:
   - docker login --username=$DH_USERNAME --password=$DH_PASSWORD
