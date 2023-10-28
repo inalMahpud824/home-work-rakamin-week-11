@@ -1,36 +1,37 @@
-stages:
-  - test
-  - build
-  - deploy
+image: node:18-alpine
 
 variables:
-  # Definisi variabel global di sini
-  POSTGRES_DB: db_hw_week11
-  DOCKER_IMAGE: inalmahpud1/homework-prisma-postgres-api:1.0 # Ganti dengan informasi gambar Anda
+  REPOSITORY_URL: inalmahpud1/homework-prisma-postgres-api
 
-# Job untuk menguji kode
-test:
-  stage: test
-  script:
-    npm run test
+services:
+  -docker:dind
 
-# Job untuk membangun aplikasi dan gambar Docker
-build:
+before_script:
+  - docker login --username=$DH_USERNAME --password=$DH_PASSWORD
+
+stages:
+  - build
+  - deploy
+build: 
   stage: build
   script:
-    - echo "Building the application..."
-    # Lakukan langkah-langkah build aplikasi Anda di sini
-    - docker build -t $DOCKER_IMAGE .
-
-# Job untuk mengirim gambar Docker ke Docker Hub
+    - echo "Build image..."
+    - docker build 
+      -t homework-prisma-postgres-api:1.0
+      --build-arg PORT=PORT
+      --no-cache
+    - echo "Tagging image..."
+    - docker tag homework-prisma-postgres-api:1.0 $REPOSITORY_URL:1.0
+    - echo "pushing image"
+    - docker push $REPOSITORY_URL:1.0
+  only:
+    - master
+  
 deploy:
   stage: deploy
-  only:
-    - master # Hanya jalankan ketika ada perubahan pada branch master
   script:
-    - echo "Deploying to Docker Hub..."
-    - docker login --username=$DH_USERNAME --password=$DH_PASSWORD
-    - docker push $DOCKER_IMAGE
-
-# Job lainnya...
-# Anda bisa menambahkan lebih banyak job sesuai kebutuhan Anda
+    - docker homework-prisma-postgres-api || true && docker rm homework-prisma-postgres-api || true
+    - docker container run -dt -p $PORT:$PORT --name homework-prisma-postgres-api $REPOSITORY_URL:1.0
+    - docker image prune -f
+  only:
+    - master
