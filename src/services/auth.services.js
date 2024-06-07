@@ -25,7 +25,7 @@ const register = async (params) => {
       const result = await userRepository.updateUser(
         cekEmail.id,
         cekEmail.email,
-        cekEmail.password,
+        hashedPassword,
         cekEmail.verified
       );
       if (!result) {
@@ -37,31 +37,31 @@ const register = async (params) => {
       ).toString()}`;
       const expireTime = Date.now() + 3600000; //expire dalam 1 jam
 
-      // const emailContent = `Enter ${tokenOTP} in the app to veryy your email this OTP expire in 1 hour`;
+      const emailContent = `Enter ${tokenOTP} in the app to veryy your email this OTP expire in 1 hour`;
 
-      // // Kirim email aktivasi
-      // const mailOption = {
-      //   from: "inalmahpud32@gmail.com",
-      //   to: email,
-      //   subject: "verify your email",
-      //   text: emailContent,
-      // };
+      // Kirim email aktivasi
+      const mailOption = {
+        from: "inalmahpud32@gmail.com",
+        to: email,
+        subject: "verify your email",
+        text: emailContent,
+      };
 
-      // transport.sendMail(mailOption, function (err, data) {
-      //   if (err) {
-      //     console.log(err);
-      //     throw (err = new ResponseError(500, "Internal Server Error"));
-      //   } else {
-      //     console.log("Email sent successfully");
-      //   }
-      // });
+      transport.sendMail(mailOption, function (err, data) {
+        if (err) {
+          console.log(err);
+          throw (err = new ResponseError(500, "Internal Server Error"));
+        } else {
+          // console.log("Email sent successfully");
+        }
+      });
 
-      // const cekKodeOtp = await tokenOtpRepository.getTokenOtp(result.id)
-      // if(cekKodeOtp){
-      //   if(cekKodeOtp.expiredAt < new Date()){
-      //     await tokenOtpRepository.deleteTokenOtp(cekKodeOtp.id)
-      //   }
-      // }
+      const cekKodeOtp = await tokenOtpRepository.getTokenOtp(result.id)
+      if(cekKodeOtp){
+        if(cekKodeOtp.expiredAt < new Date()){
+          await tokenOtpRepository.deleteTokenOtp(cekKodeOtp.id)
+        }
+      }
       const getToken = await tokenOtpRepository.getTokenOtp(cekEmail.id)
       if(getToken){
         await tokenOtpRepository.deleteTokenOtp(getToken.id)
@@ -92,31 +92,31 @@ const register = async (params) => {
   const tokenOTP = `${Math.floor(10000 + Math.random() * 90000).toString()}`;
   const expireTime = Date.now() + 3600000; //expire dalam 1 jam
 
-  // const emailContent = `Enter ${tokenOTP} in the app to veryy your email this OTP expire in 1 hour`;
+  const emailContent = `Enter ${tokenOTP} in the app to veryy your email this OTP expire in 1 hour`;
 
-  // // Kirim email aktivasi
-  // const mailOption = {
-  //   from: "inalmahpud32@gmail.com",
-  //   to: email,
-  //   subject: "verify your email",
-  //   text: emailContent,
-  // };
+  // Kirim email aktivasi
+  const mailOption = {
+    from: "inalmahpud32@gmail.com",
+    to: email,
+    subject: "verify your email",
+    text: emailContent,
+  };
 
-  // transport.sendMail(mailOption, function (err, data) {
-  //   if (err) {
-  //     console.log(err);
-  //     throw (err = new ResponseError(500, "Internal Server Error"));
-  //   } else {
-  //     console.log("Email sent successfully");
-  //   }
-  // });
+  transport.sendMail(mailOption, function (err, data) {
+    if (err) {
+      console.log(err);
+      throw (err = new ResponseError(500, "Internal Server Error"));
+    } else {
+      console.log("Email sent successfully");
+    }
+  });
 
-  // const cekKodeOtp = await tokenOtpRepository.getTokenOtp(result.id)
-  // if(cekKodeOtp){
-  //   if(cekKodeOtp.expiredAt < new Date()){
-  //     await tokenOtpRepository.deleteTokenOtp(cekKodeOtp.id)
-  //   }
-  // }
+  const cekKodeOtp = await tokenOtpRepository.getTokenOtp(result.id)
+  if(cekKodeOtp){
+    if(cekKodeOtp.expiredAt < new Date()){
+      await tokenOtpRepository.deleteTokenOtp(cekKodeOtp.id)
+    }
+  }
 
   const createOtp = await tokenOtpRepository.createTokenOtp(
     result.id,
