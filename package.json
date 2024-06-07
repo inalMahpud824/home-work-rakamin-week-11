@@ -5,7 +5,8 @@
   "main": "src/index.js",
   "scripts": {
     "test": "jest",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "vercel-build": "prisma migrate deploy && prisma generate "
   },
   "author": "inal",
   "license": "ISC",
