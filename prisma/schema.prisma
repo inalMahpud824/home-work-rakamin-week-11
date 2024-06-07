@@ -1,28 +1,29 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique @db.VarChar(50)
-  password String @db.VarChar(200)
+  id         Int        @id @default(autoincrement())
+  email      String     @unique @db.VarChar(50)
+  password   String     @db.VarChar(200)
+  verified   Boolean    @default(false)
+  activities Activity[]
 
   @@map("users")
 }
 
 model Activity {
-  id    Int    @id @default(autoincrement())
-  title String @db.VarChar(100)
-  items Item[]
+  id      Int    @id @default(autoincrement())
+  user_id Int
+  title   String @db.VarChar(100)
+  items   Item[]
+  User    User   @relation(fields: [user_id], references: [id])
 
   @@map("activities")
 }
@@ -31,8 +32,16 @@ model Item {
   id          Int      @id @default(autoincrement())
   activity_id Int
   title       String   @db.VarChar(100)
-  isActive    Boolean
+  isActive    Boolean  @default(true)
   Activity    Activity @relation(fields: [activity_id], references: [id])
 
   @@map("items")
+}
+
+model TokenOTP {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  otp       String
+  createAt  DateTime
+  expiredAt DateTime
 }

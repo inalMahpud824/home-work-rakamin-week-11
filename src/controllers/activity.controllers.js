@@ -2,7 +2,7 @@ const { activityServices } = require("../services");
 
 const getAllActivity = async (req, res) => {
   try {
-    const result = await activityServices.getAllActivity();
+    const result = await activityServices.getAllActivity(req.params);
     res.status(200).json({ message: "success", result });
   } catch (err) {
     res.status(err.status).json(err.message);

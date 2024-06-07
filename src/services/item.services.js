@@ -1,8 +1,10 @@
 const ResponseError = require("../utils");
 const { itemRepository } = require("../repository");
 
-const getAllItems = async () => {
-  const result = await itemRepository.getAllItems()
+const getAllItems = async (params) => {
+  const {id} = params
+  const userId = parseInt(id)
+  const result = await itemRepository.getAllItems(userId)
   if (!result) {
     throw (err = new ResponseError(500, "Internal Server Error"));
   }
@@ -11,6 +13,10 @@ const getAllItems = async () => {
 
 const getItemById = async (params) => {
   const {id} = params
+  const cekIdIsNotString = parseInt(id)
+  if(!cekIdIsNotString){
+    throw (err = new ResponseError(404, "Item not found"));
+  }
   const result = await itemRepository.getItemById(id)
   if (!result) {
     throw (err = new ResponseError(404, "Item not found"));
@@ -20,7 +26,8 @@ const getItemById = async (params) => {
 
 const createItem = async (body) => {
   const {activity_id, title, isActive} = body
-  const result = await itemRepository.createItem(activity_id, title, isActive)
+  const activityId = parseInt(activity_id)
+  const result = await itemRepository.createItem(activityId, title, isActive)
   if (!result) {
     throw (err = new ResponseError(500, "Internal Server Error"));
   }
@@ -30,7 +37,10 @@ const createItem = async (body) => {
 const updateItem = async (params, body) => {
   const {id} = params
   const {activity_id, title, isActive} = body
-
+  const cekIdIsNotString = parseInt(id)
+  if(!cekIdIsNotString){
+    throw (err = new ResponseError(404, "Item not found"));
+  }
   const cekId = await itemRepository.getItemById(id);
   if (!cekId) {
     throw (err = new ResponseError(404, "Item not found"));
@@ -45,7 +55,10 @@ const updateItem = async (params, body) => {
 
 const deleteItem = async (params) => {
   const {id} = params
-
+  const cekIdIsNotString = parseInt(id)
+  if(!cekIdIsNotString){
+    throw (err = new ResponseError(404, "Item not found"));
+  }
  const cekId = await itemRepository.getItemById(id);
   if (!cekId) {
     throw (err = new ResponseError(404, "Item not found"));

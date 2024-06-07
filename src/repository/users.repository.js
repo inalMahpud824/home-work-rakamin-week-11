@@ -7,7 +7,8 @@ const createUser = async (email, password) => {
       password: password,
     },
     select: {
-      email: true,
+      id: true,
+      email: true
     },
   });
   return result;
@@ -27,12 +28,35 @@ const getUserByEmail = async (email) => {
     where:{
       email: email
     },
-    select:{
-      email: true,
-      password: true
-    }
   })
   return result
 };
 
-module.exports = { createUser, getAllUsers, getUserByEmail };
+const updateVerifyUser = async (id) => {
+  const result = await prisma.user.update({
+    where:{
+      id: id,
+    },
+    data: {
+      verified: true
+    }
+  })
+  return result
+}
+
+const updateUser = async (id, email, password, verified) => {
+  const result = await prisma.user.update({
+    where:{
+      id: id
+    },
+    data: {
+      email: email,
+      password: password,
+      verified: verified
+    }
+  })
+  return result
+}
+
+
+module.exports = { createUser, getAllUsers, getUserByEmail, updateVerifyUser, updateUser };

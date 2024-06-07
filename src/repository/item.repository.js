@@ -1,53 +1,63 @@
-const prisma = require('../models')
+const prisma = require("../models");
 
 const createItem = async (activity_id, title, isActive) => {
   const result = await prisma.item.create({
-    data:{
+    data: {
       activity_id: activity_id,
       title: title,
       isActive: isActive,
-    }
-  })
-  return result
-}
+    },
+  });
+  return result;
+};
 const getItemById = async (params) => {
-  const id = parseInt(params)
+  const id = parseInt(params);
   const result = await prisma.item.findUnique({
-    where:{
-      id: id
-    }
-  })
-  return result
-}
+    where: {
+      id: id,
+    },
+  });
+  return result;
+};
 
-const getAllItems = async () => {
-  const result = await prisma.item.findMany()
-  return result
-}
+const getAllItems = async (id) => {
+  const result = await prisma.item.findMany({
+    where: {
+      activity_id: id,
+    },
+  });
+  return result;
+};
 
 const updateItem = async (params, activity_id, title, isActive) => {
-  const id = parseInt(params)
+  const id = parseInt(params);
   const result = await prisma.item.update({
-    where:{
-      id: id
+    where: {
+      id: id,
     },
-    data:{
+    data: {
       activity_id: activity_id,
       title: title,
-      isActive: isActive
-    }
-  })
-  return result
-}
+      isActive: isActive,
+    },
+  });
+  return result;
+};
 
 const deleteItem = async (params) => {
-  const id = parseInt(params)
+  const id = parseInt(params);
   const result = await prisma.item.delete({
-    where:{
-      id: id
-    }
-  })
-  return result
-}
+    where: {
+      id: id,
+    },
+  });
+  return result;
+};
 
-module.exports = {createItem, getAllItems, getItemById, updateItem, deleteItem}
+module.exports = {
+  createItem,
+  getAllItems,
+  getItemById,
+  updateItem,
+  deleteItem,
+};

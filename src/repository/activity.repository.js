@@ -1,14 +1,19 @@
 const prisma = require('../models')
 
-const getAllActivity = async () => {
-  const result = await prisma.activity.findMany()
+const getAllActivity = async (id) => {
+  const result = await prisma.activity.findMany({
+    where:{
+      user_id: id
+    }
+  })
   return result
 }
 
-const createActivity = async (title) => {
+const createActivity = async (title, userId) => {
   const result = await prisma.activity.create({
     data:{
-      title:title
+      title:title,
+      user_id: userId
     },
     select:{
       title: true

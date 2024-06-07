@@ -2,7 +2,7 @@ const { itemServices } = require("../services");
 
 const getAllItems = async (req, res) => {
   try {
-    const result = await itemServices.getAllItems();
+    const result = await itemServices.getAllItems(req.params);
     res.status(200).json({ message: "success", result });
   } catch (err) {
     res.status(err.status).json(err.message);
