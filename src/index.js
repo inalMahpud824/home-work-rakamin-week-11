@@ -10,4 +10,4 @@ app.listen(port, () => {
   console.log('server berjalan di port ' + port)
 })
 
-module.exports = {app}
+module.exports = app
